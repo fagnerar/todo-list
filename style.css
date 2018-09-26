@@ -84,12 +84,56 @@ main {
   margin-top: 2rem;
 }
 
+.todo {
+	position: relative;
+}
+
+.real-check {
+  position: absolute;
+	overflow: hidden;
+	left: -100%;
+}
+
 .checker {
-  border: 0;
-  vertical-align: middle;
-  margin: -2px 1rem 0 0;
+	position: relative;
+	display: inline-block;
+	background-color: #ea4c4c;
+	width: 1.2rem;
+	height: 1.2rem;
+	margin-right: 1rem;
+}
+
+.real-check:checked + .checker:before {
+	content: '\2713';
+	font-size: 1rem;
+	font-weight: 900;
+	position: absolute;
+	top: .2em;
+	left: .2em;
+	color: #e84545;
+}
+
+.real-check:checked + .checker {
+	background-color: #a1c45a;
+	border: 1px solid #e84545;
+}
+
+.real-check:checked ~ span {
+	color: #a1c45a;
+	font-weight: 400;
+	text-decoration: line-through;
 }
 
 .todo {
   padding: .5rem;
 }
+
+
+
+
+
+
+
+
+
+/**/
