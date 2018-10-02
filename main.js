@@ -1,23 +1,44 @@
 let btnAdd = document.querySelector('.btn-add');
 
 btnAdd.addEventListener('click', function(e) {
-  const newCheckId = getCheckId();
+  if (isInputClear()) return;
+  document.querySelector('.list').appendChild(newTODO());
+  clearInput();
+});
 
-  const newCheckbox = getNewCheckbox(newCheckId);
-  const newLabel = getNewLabel(newCheckId);
-  const newSpan = getNewSpan();
-
-  const newLine = getLastLine().cloneNode();
-  newLine.appendChild(newCheckbox);
-  newLine.appendChild(newLabel);
-  newLine.appendChild(newSpan);
-
+function newTODO() {
   /* <li class="todo">
   <input type="checkbox" class="real-check" id="check{number}">
   <label for="check{number}" class="checker"></label>
-  <span>Input text.</span></li> */
-  document.querySelector('.list').appendChild(newLine);
-});
+  <span>Input text.</span><div class="trash"></div></li> */
+  const newCheckId = getCheckId();
+  const newCheckbox = getNewCheckbox(newCheckId);
+  const newLabel = getNewLabel(newCheckId);
+  const newSpan = getNewSpan();
+  const newTrash = getNewTrash();
+
+  const todo = getLastLine().cloneNode();
+  todo.appendChild(newCheckbox);
+  todo.appendChild(newLabel);
+  todo.appendChild(newSpan);
+  todo.appendChild(newTrash);
+
+  return todo;
+}
+
+function getNewTrash() {
+  const newTrash = document.createElement('div');
+  newTrash.className = 'trash';
+  return newTrash;
+}
+
+function isInputClear() {
+  return document.querySelector('.input-add').value === '';
+}
+
+function clearInput() {
+  document.querySelector('.input-add').value = '';
+}
 
 function getNewSpan() {
   const newSpan = document.createElement('span');
