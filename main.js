@@ -17,19 +17,35 @@ function newTODO() {
   const newSpan = getNewSpan();
   const newTrash = getNewTrash();
 
-  const todo = getLastLine().cloneNode();
+  const todo = document.createElement('li');
+  todo.className = 'todo';
   todo.appendChild(newCheckbox);
   todo.appendChild(newLabel);
   todo.appendChild(newSpan);
   todo.appendChild(newTrash);
+  todo.addEventListener('click', toggleTodo);
 
   return todo;
+}
+
+function toggleTodo() {
+  const checkbox = this.firstElementChild;
+  if (checkbox.checked) checkbox.checked = false;
+  else checkbox.checked = true;
 }
 
 function getNewTrash() {
   const newTrash = document.createElement('div');
   newTrash.className = 'trash';
+  newTrash.addEventListener('click', removeTodo);
   return newTrash;
+}
+
+function removeTodo() {
+  const li = this.parentNode;
+  if ( ! li.firstElementChild.checked) return;
+
+  li.parentNode.removeChild(li);
 }
 
 function isInputClear() {

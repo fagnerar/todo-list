@@ -123,6 +123,9 @@ main {
 	font-weight: 400;
 	text-decoration: line-through;
 }
+.lol {
+	width: 100%;
+}
 
 .real-check:checked ~ .trash {
 	background-color: #a1c45a;
