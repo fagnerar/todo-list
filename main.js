@@ -1,3 +1,23 @@
+(function init() {
+  const todoList =  document.querySelector('.list');
+
+  for (let i = 0; i < 5; i++) {
+    todoList.appendChild(newTODO());
+  }
+
+  initTODO(0, 'Preparar mp3 player.');
+  initTODO(1, 'Fazer alongamento por 10 minutos.');
+  initTODO(2, 'Colocar o tênis.');
+  initTODO(3, 'Sair na rua.');
+  initTODO(4, 'Correr.');
+
+  function initTODO(index, todoText) {
+    todoList.children[index]
+      .getElementsByTagName('span')[0]
+      .innerText = todoText;
+  }
+})();
+
 let btnAdd = document.querySelector('.btn-add');
 
 btnAdd.addEventListener('click', function(e) {
@@ -80,6 +100,9 @@ function getNewCheckbox(newCheckId) {
 }
 
 function getCheckId() {
+  const hasTodo = document.querySelector('.list').hasChildNodes();
+  if ( ! hasTodo) return 'check1';
+
   let newCheckId = getLastCheckId().match(/[0-9]+/gi);
   newCheckId = parseInt(newCheckId) + 1;
   newCheckId = 'check' + newCheckId;
