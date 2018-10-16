@@ -16,11 +16,10 @@
       .getElementsByTagName('span')[0]
       .innerText = todoText;
   }
-})();
 
-let btnAdd = document.querySelector('.btn-add');
+const btnAdd = document.querySelector('.btn-add');
 
-btnAdd.addEventListener('click', function(e) {
+document.querySelector('.btn-add').addEventListener('click', function(e) {
   if (isInputClear()) return;
   document.querySelector('.list').appendChild(newTODO());
   clearInput();
@@ -29,11 +28,13 @@ btnAdd.addEventListener('click', function(e) {
 function newTODO() {
   /* <li class="todo">
   <input type="checkbox" class="real-check" id="check{number}">
+  <div class="drag"></div>
   <label for="check{number}" class="checker"></label>
   <span>Input text.</span><div class="trash"></div></li> */
   const newCheckId = getCheckId();
   const newCheckbox = getNewCheckbox(newCheckId);
   const newLabel = getNewLabel(newCheckId);
+  const newDrag = getNewDrag();
   const newSpan = getNewSpan();
   const newTrash = getNewTrash();
 
@@ -41,6 +42,7 @@ function newTODO() {
   todo.className = 'todo';
   todo.appendChild(newCheckbox);
   todo.appendChild(newLabel);
+  todo.appendChild(newDrag);
   todo.appendChild(newSpan);
   todo.appendChild(newTrash);
   todo.addEventListener('click', toggleTodo);
@@ -52,6 +54,12 @@ function toggleTodo() {
   const checkbox = this.firstElementChild;
   if (checkbox.checked) checkbox.checked = false;
   else checkbox.checked = true;
+}
+
+function getNewDrag() {
+  const newDrag = document.createElement('div');
+  newDrag.className = 'drag';
+  return newDrag;
 }
 
 function getNewTrash() {
@@ -121,3 +129,5 @@ function getLastCheckId() {
 function getLastLine() {
   return document.querySelector('.list').lastElementChild;
 }
+
+})();
