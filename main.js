@@ -104,13 +104,6 @@ function handleDrop(e) {
     return;
   }
 
-  // const spanToChange = this.querySelector('span');
-
-  // if (dragSrc.innerText !== spanToChange.innerText) {
-  //   dragSrc.innerText = spanToChange.innerText;
-  //   spanToChange.innerText = e.dataTransfer.getData('text/html');
-  // }
-  // return false;
   const itemArray = Array.prototype.slice.call(this.parentNode.children);
   const draggedItemPosition = itemArray.indexOf(dragSrc);
   const newPosition = itemArray.indexOf(this);
@@ -179,21 +172,17 @@ function getNewCheckbox(newCheckId) {
 }
 
 function getCheckId() {
-  const hasTodo = todoList.hasChildNodes();
-  if ( ! hasTodo) return 'check1';
+  if ( ! todoList.hasChildNodes() ) return 'check0';
 
-  let newCheckId = getLastCheckId().match(/[0-9]+/gi);
-  newCheckId = parseInt(newCheckId) + 1;
+  let newCheckId = 0;
+
+  while (todoList.querySelector('#check' + newCheckId)) {
+    newCheckId++;
+  }
+
   newCheckId = 'check' + newCheckId;
 
   return newCheckId;
-}
-
-function getLastCheckId() {
-  const lastLine = todoList.lastElementChild;
-  const lastCheckId = lastLine.firstElementChild.id;
-
-  return lastCheckId;
 }
 
 })();
