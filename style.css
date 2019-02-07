@@ -28,6 +28,12 @@ footer, header, hgroup, menu, nav, section {
 body {
   background-color: #fff9e0;
 	line-height: 1;
+		-webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 ol, ul {
 	list-style: none;
@@ -136,7 +142,6 @@ main {
 }
 
 .trash {
-	display: inline-block;
 	float: right;
 	height: 2rem;
 	width: 2rem;
@@ -148,8 +153,8 @@ main {
 }
 
 .drag {
-	display: inline-block;
 	float: left;
+	cursor: grab;
 	height: 2rem;
 	width: 2rem;
 	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 4.2 4.2'%3E%3Cpath d='M1.2.23a.4.4 0 1 0 0 .8.4.4 0 1 0 0-.8zm1.8 0a.4.4 0 1 0 0 .8.4.4 0 1 0 0-.8zm-1.8 1.4a.4.4 0 0 0-.4.4.4.4 0 1 0 .8 0 .4.4 0 0 0-.4-.4zm1.8 0a.4.4 0 0 0-.4.4.4.4 0 1 0 .8 0 .4.4 0 0 0-.4-.4zm-1.8 1.4a.4.4 0 0 0-.4.4.4.4 0 1 0 .8 0 .4.4 0 0 0-.4-.4zm1.8 0a.4.4 0 0 0-.4.4.4.4 0 1 0 .8 0 .4.4 0 0 0-.4-.4z' fill='%23a1c45a'/%3E%3C/svg%3E");
@@ -157,7 +162,9 @@ main {
 	background-position: 50% 65%;
 	background-size: 1rem;
 }
-
+.drag:active {
+	cursor: grabbing;
+}
 
 
 

@@ -1,27 +1,28 @@
 (function init() {
   const todoList =  document.querySelector('.list');
 
-  for (let i = 0; i < 5; i++) {
-    todoList.appendChild(newTODO());
-  }
+for (let i = 0; i < 5; i++) {
+  todoList.appendChild(newTODO());
+}
 
-  initTODO(0, 'Preparar mp3 player.');
-  initTODO(1, 'Fazer alongamento por 10 minutos.');
-  initTODO(2, 'Colocar o tênis.');
-  initTODO(3, 'Sair na rua.');
-  initTODO(4, 'Correr.');
+initTODO(0, 'Preparar mp3 player.');
+initTODO(1, 'Fazer alongamento por 10 minutos.');
+initTODO(2, 'Colocar o tênis.');
+initTODO(3, 'Sair na rua.');
+initTODO(4, 'Correr.');
 
-  function initTODO(index, todoText) {
-    todoList.children[index]
-      .getElementsByTagName('span')[0]
-      .innerText = todoText;
-  }
-
-const btnAdd = document.querySelector('.btn-add');
+function initTODO(index, todoText) {
+  todoList
+    .children[index]
+    .getElementsByTagName('span')[0]
+    .innerText = todoText;
+}
 
 document.querySelector('.btn-add').addEventListener('click', function(e) {
   if (isInputClear()) return;
-  document.querySelector('.list').appendChild(newTODO());
+
+  todoList.appendChild(newTODO());
+
   clearInput();
 });
 
@@ -47,6 +48,12 @@ function newTODO() {
   todo.appendChild(newTrash);
   todo.addEventListener('click', toggleTodo);
 
+  todo.addEventListener('dragstart', handleDragStart, false);
+  todo.addEventListener('dragend', handleDragEnd, false);
+  todo.addEventListener('dragenter', handleDragEnter, false);
+  todo.addEventListener('dragover', handleDragOver, false);
+  todo.addEventListener('drop', handleDrop, false);
+  todo.addEventListener('dragleave', handleLeave, false);
   return todo;
 }
 
@@ -59,7 +66,70 @@ function toggleTodo() {
 function getNewDrag() {
   const newDrag = document.createElement('div');
   newDrag.className = 'drag';
+  newDrag.addEventListener('mousedown', function() {
+    this.parentNode.draggable = true;
+  });
+  newDrag.addEventListener('mouseup', function() {
+    this.parentNode.draggable = false;
+  });
   return newDrag;
+}
+
+let dragSrc = null;
+function handleDragStart(e) {
+  this.style.opacity = 0.4;
+  dragSrc = this;
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/html', dragSrc.innerHTML);
+}
+
+function handleDragEnter() {
+}
+
+function handleDragOver(e) {
+  if (e.preventDefault) {
+    e.preventDefault();
+  }
+
+  e.dataTransfer.dropEffect = 'move';
+  return false;
+}
+
+function handleDrop(e) {
+  if (e.stopPropagation) {
+    e.stopPropagation();
+  }
+
+  if (dragSrc === this) {
+    return;
+  }
+
+  // const spanToChange = this.querySelector('span');
+
+  // if (dragSrc.innerText !== spanToChange.innerText) {
+  //   dragSrc.innerText = spanToChange.innerText;
+  //   spanToChange.innerText = e.dataTransfer.getData('text/html');
+  // }
+  // return false;
+  const itemArray = Array.prototype.slice.call(this.parentNode.children);
+  const draggedItemPosition = itemArray.indexOf(dragSrc);
+  const newPosition = itemArray.indexOf(this);
+
+  if (draggedItemPosition < newPosition) {
+    this.parentNode.insertBefore(dragSrc, this.nextSibling);
+
+  } else {
+    this.parentNode.insertBefore(dragSrc, this);
+    
+  }
+}
+
+function handleLeave() {
+}
+
+function handleDragEnd() {
+  this.draggable = false;
+  this.style.opacity = 1.0;
 }
 
 function getNewTrash() {
@@ -87,6 +157,7 @@ function clearInput() {
 function getNewSpan() {
   const newSpan = document.createElement('span');
   newSpan.innerText = document.querySelector('.input-add').value;
+  newSpan.draggable = false;
   return newSpan;
 }
 
@@ -108,7 +179,7 @@ function getNewCheckbox(newCheckId) {
 }
 
 function getCheckId() {
-  const hasTodo = document.querySelector('.list').hasChildNodes();
+  const hasTodo = todoList.hasChildNodes();
   if ( ! hasTodo) return 'check1';
 
   let newCheckId = getLastCheckId().match(/[0-9]+/gi);
@@ -119,15 +190,10 @@ function getCheckId() {
 }
 
 function getLastCheckId() {
-  const list = document.querySelector('.list');
-  const lastLine = list.lastElementChild;
+  const lastLine = todoList.lastElementChild;
   const lastCheckId = lastLine.firstElementChild.id;
 
   return lastCheckId;
-}
-
-function getLastLine() {
-  return document.querySelector('.list').lastElementChild;
 }
 
 })();
