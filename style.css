@@ -166,7 +166,17 @@ main {
 	cursor: grabbing;
 }
 
+.beingDragged {
+	background-color: #ddd;
+	display: none;
+}
 
-
+.placeholder-item {
+	display: block;
+	height: 1em;
+	border: 2px dashed #ccc;
+	padding: calc(.5rem - 2px);
+	cursor: default;
+}
 
 /**/

@@ -50,10 +50,7 @@ function newTODO() {
 
   todo.addEventListener('dragstart', handleDragStart, false);
   todo.addEventListener('dragend', handleDragEnd, false);
-  todo.addEventListener('dragenter', handleDragEnter, false);
   todo.addEventListener('dragover', handleDragOver, false);
-  todo.addEventListener('drop', handleDrop, false);
-  todo.addEventListener('dragleave', handleLeave, false);
   return todo;
 }
 
@@ -66,32 +63,58 @@ function toggleTodo() {
 function getNewDrag() {
   const newDrag = document.createElement('div');
   newDrag.className = 'drag';
+
   newDrag.addEventListener('mousedown', function() {
     this.parentNode.draggable = true;
   });
   newDrag.addEventListener('mouseup', function() {
     this.parentNode.draggable = false;
   });
+
   return newDrag;
 }
 
 let dragSrc = null;
+const placeholderItem = document.createElement('li');
+placeholderItem.className = 'placeholder-item';
+placeholderItem.addEventListener('dragover', handlePlaceholderDragOver, false);
+placeholderItem.addEventListener('drop', handleDrop, false);
+
+function handlePlaceholderDragOver(e) {
+  if (e.preventDefault) {
+    e.preventDefault();
+  }
+  return false;
+}
+
 function handleDragStart(e) {
   this.style.opacity = 0.4;
   dragSrc = this;
+  dragSrc.className += ' beingDragged';
+  todoList.insertBefore(placeholderItem, this);
   e.dataTransfer.effectAllowed = 'move';
   e.dataTransfer.setData('text/html', dragSrc.innerHTML);
-}
-
-function handleDragEnter() {
 }
 
 function handleDragOver(e) {
   if (e.preventDefault) {
     e.preventDefault();
   }
+  if (this === dragSrc || this === placeholderItem) return;
 
   e.dataTransfer.dropEffect = 'move';
+
+  const itemArray = Array.prototype.slice.call(todoList.children);
+  const lastPosition = itemArray.indexOf(placeholderItem);
+  const newPosition = itemArray.indexOf(this);
+
+  if (lastPosition < newPosition) {
+    todoList.insertBefore(placeholderItem, this.nextSibling);
+
+  } else {
+    todoList.insertBefore(placeholderItem, this);
+  }
+
   return false;
 }
 
@@ -100,29 +123,16 @@ function handleDrop(e) {
     e.stopPropagation();
   }
 
-  if (dragSrc === this) {
-    return;
-  }
+  todoList.insertBefore(dragSrc, this);
+  todoList.removeChild(this);
 
-  const itemArray = Array.prototype.slice.call(this.parentNode.children);
-  const draggedItemPosition = itemArray.indexOf(dragSrc);
-  const newPosition = itemArray.indexOf(this);
-
-  if (draggedItemPosition < newPosition) {
-    this.parentNode.insertBefore(dragSrc, this.nextSibling);
-
-  } else {
-    this.parentNode.insertBefore(dragSrc, this);
-    
-  }
-}
-
-function handleLeave() {
+  return false;
 }
 
 function handleDragEnd() {
   this.draggable = false;
   this.style.opacity = 1.0;
+  dragSrc.className = dragSrc.className.replace(' beingDragged', '').trim();
 }
 
 function getNewTrash() {
